@@ -1,0 +1,38 @@
+number: 223
+title: Multi-User-Applikationen objektorientiert realisieren
+competences:
+  - - title: Projektqualität
+      items:
+        - title: Dokumentation
+        - title: Sinnvoller Einsatz von Dokumentationstools
+        - title: Konventionen beachtet (Code, Dateinamen, Frameworks etc.)
+        - title: Applikation ist lauffähig
+        - title: Abschlusspräsentation
+
+    - title: Domänenmodell und Architektur
+      items:
+        - title: Anforderungen berücksichtigt
+        - title: Domänenspezifische Fachbegriffe verwendet
+        - title: Implementation entspricht Dokumentation
+
+    - title: Datenmanagement und Persistenz
+      items:
+        - title: Datenbankmodell
+        - title: Transaktionen
+
+    - title: Multi-User Aspekte
+      items:
+        - title: Authentifizierung
+        - title: Benutzerprofil
+        - title: Benutzerverwaltung
+        - title: Domänen-spezifische Funktionalität
+        - title: Tests
+
+  - - title: Sozialkompetenz
+      items:
+        - title: "Arbeits- und Terminverhalten (Anzahl Verspätungen: %{absences_count})"
+
+  - - title: Schriftliche Einzelprüfung (Online-Test)
+      items:
+        - title: Verständnisfragen
+          max_points: 10.0

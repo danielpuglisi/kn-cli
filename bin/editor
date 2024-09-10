@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'thor'
+require_relative '../lib/editor'
+
+class CLI < Thor
+  default_task :start
+
+  desc 'start', 'Start the editor to assign points'
+  method_option :kn, type: :string, desc: 'KN configuration file'
+  method_option :students, type: :string, desc: 'Students configuration file'
+  method_option :data, type: :string, desc: 'Data configuration file'
+  def start
+    Editor.new(options[:students], options[:kn], options[:data]).run
+  end
+end
+
+CLI.start
