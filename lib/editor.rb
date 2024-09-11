@@ -7,6 +7,7 @@ require 'yaml'
 require 'io/console'
 require_relative "curriculum"
 require_relative "student"
+require_relative "grade_calculator"
 
 class Editor
   HIGHLIGHT_COLOR = "\e[44m"  # Light blue background
@@ -64,14 +65,27 @@ class Editor
       end + ["Max: #{competence[:max_points]}"]
     end
 
-    footer_row = ['Total'] + @students.map do |student|
+    total_row = ['Total'] + @students.map do |student|
       total = @competences.sum { |comp| get_cell_value(comp[:id], student.id).to_f }
       format_cell_value(total)
     end + ['']
 
+    grade1_row = ['Note ungerundet'] + @students.map do |student|
+      total = @competences.sum { |comp| get_cell_value(comp[:id], student.id).to_f }
+      grade = GradeCalculator.calculate(total)
+      format_cell_value(grade)
+    end + ['']
+
+    grade2_row = ['Note'] + @students.map do |student|
+      total = @competences.sum { |comp| get_cell_value(comp[:id], student.id).to_f }
+      grade = GradeCalculator.calculate(total)
+      rounded_grade = GradeCalculator.round(grade)
+      format_cell_value(rounded_grade)
+    end + ['']
+
     table = TTY::Table.new(
       header: [''] + headers + ['Hint'],
-      rows: [:separator] + special_rows + [:separator] + competence_rows + [:separator] + [footer_row]
+      rows: [:separator] + special_rows + [:separator] + competence_rows + [:separator] + [total_row] + [:separator] + [grade1_row] + [grade2_row]
     )
 
     puts table.render(:unicode, padding: [0, 1], width: 200, resize: true)
