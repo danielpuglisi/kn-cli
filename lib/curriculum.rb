@@ -22,6 +22,14 @@ class Curriculum
     @special_attributes = @special_attributes.uniq
   end
 
+  def to_save_data
+    {
+      number: @number,
+      title: @title,
+      competences: @competences
+    }
+  end
+
   private
 
   def build_competences(raw_competences)

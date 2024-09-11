@@ -66,21 +66,15 @@ class Editor
     end
 
     total_row = ['Total'] + @students.map do |student|
-      total = @competences.sum { |comp| get_cell_value(comp[:id], student.id).to_f }
-      format_cell_value(total)
+      format_cell_value(student.total_points)
     end + ['']
 
     grade1_row = ['Note ungerundet'] + @students.map do |student|
-      total = @competences.sum { |comp| get_cell_value(comp[:id], student.id).to_f }
-      grade = GradeCalculator.calculate(total)
-      format_cell_value(grade)
+      format_cell_value(student.unrounded_grade)
     end + ['']
 
     grade2_row = ['Note'] + @students.map do |student|
-      total = @competences.sum { |comp| get_cell_value(comp[:id], student.id).to_f }
-      grade = GradeCalculator.calculate(total)
-      rounded_grade = GradeCalculator.round(grade)
-      format_cell_value(rounded_grade)
+      format_cell_value(student.grade)
     end + ['']
 
     table = TTY::Table.new(
@@ -264,17 +258,32 @@ class Editor
     end
   end
 
+  def cache_points_on_students
+    @students.each do |student|
+      student.total_points = @competences.sum { |comp| get_cell_value(comp[:id], student.id).to_f }
+      student.unrounded_grade = GradeCalculator.calculate(student.total_points)
+      student.grade = GradeCalculator.round(student.unrounded_grade)
+    end
+  end
+
   def save_data
-    File.write(@data_file, JSON.pretty_generate(@data))
+    cache_points_on_students
+
+    json = {}
+    json['curriculum'] = @curriculum.to_save_data
+    json['students'] = @students.map(&:to_save_data)
+    json['data'] = @data
+    File.write(@data_file, JSON.pretty_generate(json))
     # puts "Data saved successfully!"
     # sleep(1)
   end
 
   def load_data
     @students = CSV.read(@students_file, headers: true, header_converters: :symbol, liberal_parsing: true).map { |row| Student.new(row) }
-    curriculum = Curriculum.new(@competences_file)
-    @special_attributes = curriculum.special_attributes
-    @competences = curriculum.competences
-    @data = File.exist?(@data_file) ? JSON.parse(File.read(@data_file)) : {}
+    @curriculum = Curriculum.new(@competences_file)
+    @special_attributes = @curriculum.special_attributes
+    @competences = @curriculum.competences
+    @data = File.exist?(@data_file) ? JSON.parse(File.read(@data_file))['data'] : {}
+    cache_points_on_students
   end
 end

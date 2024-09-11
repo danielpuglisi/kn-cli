@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'thor'
+require 'json'
+require_relative '../lib/editor'
+require_relative '../lib/pdf_builder'
+
+class CLI < Thor
+  def self.exit_on_failure?
+    true
+  end
+
+  desc 'edit [DATA_FILE]', 'Start the editor to assign points'
+  method_option :curriculum, type: :string, desc: 'KN configuration file', required: true
+  method_option :students, type: :string, desc: 'Students configuration file', required: true
+  def edit(data_file)
+    Editor.new(options[:students], options[:curriculum], data_file).run
+  rescue Thor::RequiredArgumentMissingError => e
+    puts "Error: #{e.message}"
+  end
+
+  desc 'pdf [DATA_FILE]', 'Generate pdfs from a data file'
+  method_option :date, type: :string, desc: 'End date of course', required: true
+  method_option :instructor, type: :string, desc: 'Your name', required: true
+  def pdf(data_file)
+    json = JSON.parse(File.read(data_file))
+    json['students'].each do |student|
+      PdfBuilder.call(json['curriculum'], student: student, data: json['data'], date: options[:date], instructor: options[:instructor])
+    end
+  end
+end
+
+CLI.start
