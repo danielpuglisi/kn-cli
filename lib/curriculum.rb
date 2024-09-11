@@ -8,6 +8,20 @@ class Curriculum
     build_competences(@yaml['competences'])
   end
 
+  def special_attributes
+    return @special_attributes if @special_attributes
+
+    @special_attributes = [{ id: :pc_number, title: 'PC Number' }]
+    @competences.each do |competence|
+      if competence[:title].is_a?(String)
+        competence[:title].scan(/%{(\w+)}/).flatten.each do |variable|
+          @special_attributes << { id: variable, title: variable }
+        end
+      end
+    end
+    @special_attributes = @special_attributes.uniq
+  end
+
   private
 
   def build_competences(raw_competences)
