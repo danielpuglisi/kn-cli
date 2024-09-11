@@ -80,10 +80,10 @@ class Editor
     puts "Student: #{@students[@current_col].name}"
     puts "#{current_row_name}: #{current_row_title}"
     puts "Current input: #{@input_buffer}" if @input_buffer.length > 0
-    puts "\nUse arrow keys or H/J/K/L to navigate, enter numbers to update cells"
+    puts "\nUse h/j/k/l to navigate, enter numbers to update cells"
     puts "Use up/down arrows to increase/decrease values (0.25 steps for floats)"
     puts "Use left arrow for min value, right arrow for max value"
-    puts "Press Enter to commit input, DEL to remove value, 'q' to quit"
+    puts "Press Enter to commit input, Backspace to remove value, 'q' to quit"
   end
 
   def highlight(value, row, col)
