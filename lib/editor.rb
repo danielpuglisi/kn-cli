@@ -36,6 +36,7 @@ class Editor
       when 'l', 'L' then move_cursor(:right)
       when /[0-9.-]/ then handle_number_input(input)
       when "\r", "\n" then commit_input
+      when "\x7F", "\b" then handle_backspace
       when 's', 'S' then save_data
       when 'q', 'Q' then break
       end
@@ -82,7 +83,7 @@ class Editor
     puts "\nUse arrow keys or H/J/K/L to navigate, enter numbers to update cells"
     puts "Use up/down arrows to increase/decrease values (0.25 steps for floats)"
     puts "Use left arrow for min value, right arrow for max value"
-    puts "Press Enter to commit input, '-' to remove value, 's' to save, 'q' to quit"
+    puts "Press Enter to commit input, DEL to remove value, 'q' to quit"
   end
 
   def highlight(value, row, col)
@@ -131,6 +132,14 @@ class Editor
     @input_buffer = ""
   end
 
+  def handle_backspace
+    if @input_buffer.empty?
+      update_cell(nil)
+    else
+      @input_buffer.chop!
+    end
+  end
+
   def adjust_value(direction)
     current_value = get_current_cell_value
 
@@ -177,6 +186,8 @@ class Editor
         end
       end
     end
+
+    save_data
   end
 
   def get_cell_value(row_id, student_id)
@@ -241,8 +252,8 @@ class Editor
 
   def save_data
     File.write(@data_file, JSON.pretty_generate(@data))
-    puts "Data saved successfully!"
-    sleep(1)
+    # puts "Data saved successfully!"
+    # sleep(1)
   end
 
   def load_data
