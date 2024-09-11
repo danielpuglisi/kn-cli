@@ -85,11 +85,11 @@ class Editor
       format_cell_value(student.total_points)
     end + ['']
 
-    grade1_row = ['Note ungerundet'] + @students.map do |student|
+    grade1_row = ['Grade (unrounded)'] + @students.map do |student|
       format_cell_value(student.unrounded_grade)
     end + ['']
 
-    grade2_row = ['Note'] + @students.map do |student|
+    grade2_row = ['Grade (final)'] + @students.map do |student|
       format_cell_value(student.grade)
     end + ['']
 
