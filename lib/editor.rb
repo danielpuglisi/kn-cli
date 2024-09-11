@@ -31,6 +31,8 @@ class Editor
       case input
       when "\e"
         handle_arrow_keys
+      when "\x08", "\x0A", "\x0B", "\x0C"  # Ctrl+H, Ctrl+J, Ctrl+K, Ctrl+L
+        handle_ctrl_key(input)
       when 'h', 'H' then move_cursor(:left)
       when 'j', 'J' then move_cursor(:down)
       when 'k', 'K' then move_cursor(:up)
@@ -107,11 +109,24 @@ class Editor
     if second_char == '['
       third_char = $stdin.getch
       case third_char
-      when 'A' then adjust_value(:up)
-      when 'B' then adjust_value(:down)
-      when 'C' then set_max_value
-      when 'D' then set_min_value
+      when 'A' then move_cursor(:up)
+      when 'B' then move_cursor(:down)
+      when 'C' then move_cursor(:right)
+      when 'D' then move_cursor(:left)
       end
+    end
+  end
+
+  def handle_ctrl_key(input)
+    case input
+    when "\x08"  # Ctrl+H
+      set_min_value
+    when "\x0A"  # Ctrl+J
+      adjust_value(:down)
+    when "\x0B"  # Ctrl+K
+      adjust_value(:up)
+    when "\x0C"  # Ctrl+L
+      set_max_value
     end
   end
 
