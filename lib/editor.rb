@@ -22,11 +22,12 @@ class Editor
     @current_row = 0
     @current_col = 0
     @input_buffer = ""
+    @screen_buffer = []
   end
 
   def run
+    render_table(true)
     loop do
-      render_table
       input = $stdin.getch
       case input
       when "\e"
@@ -43,14 +44,27 @@ class Editor
       when 's', 'S' then save_data
       when 'q', 'Q' then break
       end
+      render_table
     end
   end
 
   private
 
-  def render_table
-    system('clear') || system('cls')
+  def render_table(force_full_render = false)
+    new_buffer = generate_table_buffer
 
+    if force_full_render
+      print @cursor.clear_screen
+      print @cursor.move_to(0, 0)
+      puts new_buffer.join("\n")
+    else
+      update_screen(new_buffer)
+    end
+
+    @screen_buffer = new_buffer
+  end
+
+  def generate_table_buffer
     headers = @students.map { |student| student.name }
 
     special_rows = @special_attributes.map.with_index do |attr, row_index|
@@ -84,16 +98,42 @@ class Editor
       rows: [:separator] + special_rows + [:separator] + competence_rows + [:separator] + [total_row] + [:separator] + [grade1_row] + [grade2_row]
     )
 
-    puts table.render(:unicode, padding: [0, 1], width: 200, resize: true)
+    buffer = table.render(:unicode, padding: [0, 1], width: 200, resize: true).split("\n")
 
-    puts "\nCursor position: Row #{@current_row + 1}, Column #{@current_col + 1}"
-    puts "Student: #{@students[@current_col].name}"
-    puts "#{current_row_name}: #{current_row_title}"
-    puts "Current input: #{@input_buffer}" if @input_buffer.length > 0
-    puts "\nUse h/j/k/l to navigate, enter numbers to update cells"
-    puts "Use up/down arrows to increase/decrease values (0.25 steps for floats)"
-    puts "Use left arrow for min value, right arrow for max value"
-    puts "Press Enter to commit input, Backspace to remove value, 'q' to quit"
+    buffer += [
+      "",
+      "Cursor position: Row #{@current_row + 1}, Column #{@current_col + 1}",
+      "Student: #{@students[@current_col].name}",
+      "#{current_row_name}: #{current_row_title}",
+      (@input_buffer.length > 0 ? "Current input: #{@input_buffer}" : nil),
+      "",
+      "Use h/j/k/l to navigate, enter numbers to update cells",
+      "Use up/down arrows to increase/decrease values (0.25 steps for floats)",
+      "Use left arrow for min value, right arrow for max value",
+      "Press Enter to commit input, Backspace to remove value, 'q' to quit"
+    ]
+
+    buffer.compact
+  end
+
+  def update_screen(new_buffer)
+    max_lines = [@screen_buffer.length, new_buffer.length].max
+
+    max_lines.times do |i|
+      old_line = @screen_buffer[i]
+      new_line = new_buffer[i]
+
+      if old_line != new_line
+        print @cursor.move_to(0, i)
+        if new_line.nil?
+          print @cursor.clear_line
+        else
+          print new_line.ljust(@screen_buffer[i].to_s.length)
+        end
+      end
+    end
+
+    print @cursor.move_to(0, new_buffer.length)
   end
 
   def highlight(value, row, col)
@@ -289,8 +329,6 @@ class Editor
     json['students'] = @students.map(&:to_save_data)
     json['data'] = @data
     File.write(@data_file, JSON.pretty_generate(json))
-    # puts "Data saved successfully!"
-    # sleep(1)
   end
 
   def load_data
