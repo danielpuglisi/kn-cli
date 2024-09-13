@@ -5,20 +5,20 @@ require 'prawn/table'
 Prawn::Fonts::AFM.hide_m17n_warning = true
 
 module PdfBuilder
-  def self.call(curriculum, student:, data:, date:, instructor:)
-    number = curriculum['number']
+  def self.call(number, student:, data:, date:, instructor:, file_name: nil)
     kn = YAML.load_file("config/#{number}.yml")
 
     student_id = student['id']
     last_name = student['last_name']
     first_name = student['first_name']
     pc_number = data.dig('pc_number', student_id)
+    course = number if student['id']
     # if total points have no floating, convert to integer
-    total_points = student['total_points']
+    total_points = student['total_points'] || 0
     total_points = total_points.to_i if total_points.to_i == total_points
     total_points = total_points.to_s
-    grade = student['grade'].to_s
-    file_name = "KN#{number}_#{last_name}-#{first_name}.pdf"
+    grade = (student['grade'] || 1.0).to_s
+    file_name ||= "KN#{number}_#{last_name}-#{first_name}.pdf"
 
     logo = File.read("assets/ilv-logo.svg")
     pdf = Prawn::Document.new(page_size: 'A4', left_margin: 65.4, right_margin: 43, top_margin: 28.3, bottom_margin: 15.5) do
@@ -43,7 +43,7 @@ module PdfBuilder
           move_down 14
           fill_color "000000"
           font_size 12
-          text curriculum['title']
+          text kn['title']
         end
       end
 
@@ -54,7 +54,7 @@ module PdfBuilder
         table(
           [
             ['Name:', last_name, 'Vorname:', first_name],
-            ['Kurs:', number, 'Datum:', date],
+            ['Kurs:', course, 'Datum:', date],
             ['PC-Nr.:', pc_number, 'Kursleiter:', instructor]
           ],
           width: bounds.width ,

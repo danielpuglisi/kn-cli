@@ -26,8 +26,14 @@ class CLI < Thor
   def pdf(data_file)
     json = JSON.parse(File.read(data_file))
     json['students'].each do |student|
-      PdfBuilder.call(json['curriculum'], student: student, data: json['data'], date: options[:date], instructor: options[:instructor])
+      PdfBuilder.call(json['curriculum']['number'], student: student, data: json['data'], date: options[:date], instructor: options[:instructor])
     end
+  end
+
+  desc 'pdf [CURRICULUM_ID]', 'Generate an example PDF for a specific curriculum config'
+  method_option :file_name, type: :string, desc: 'File name for the generated PDF', required: true
+  def example_pdf(curriculum_id)
+    PdfBuilder.call(curriculum_id, student: {}, data: {}, date: '', instructor: '', file_name: options[:file_name])
   end
 end
 
