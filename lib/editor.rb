@@ -65,7 +65,10 @@ class Editor
   end
 
   def generate_table_buffer
-    headers = @students.map { |student| student.name }
+    headers = [
+      [''] + @students.map { |student| student.first_name } + ['Hint'],
+      [''] + @students.map { |student| student.last_name } + ['']
+    ]
 
     special_rows = @special_attributes.map.with_index do |attr, row_index|
       [attr[:title]] + @students.map.with_index do |student, col_index|
@@ -94,8 +97,7 @@ class Editor
     end + ['']
 
     table = TTY::Table.new(
-      header: [''] + headers + ['Hint'],
-      rows: [:separator] + special_rows + [:separator] + competence_rows + [:separator] + [total_row] + [:separator] + [grade1_row] + [grade2_row]
+      rows: headers + [:separator] + special_rows + [:separator] + competence_rows + [:separator] + [total_row] + [:separator] + [grade1_row] + [grade2_row]
     )
 
     buffer = table.render(:unicode, padding: [0, 1], width: 200, resize: true).split("\n")
