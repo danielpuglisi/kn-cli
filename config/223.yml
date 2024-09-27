@@ -7,7 +7,6 @@ competences:
         - title: Konventionen beachtet (Code, Dateinamen, Frameworks etc.)
         - title: Applikation ist lauffähig
         - title: Abschlusspräsentation
-        - title: Tests
 
     - title: Domänenmodell und Architektur
       items:
@@ -16,14 +15,15 @@ competences:
         - title: Implementation entspricht Dokumentation
         - title: Datenbankmodell
 
-    - title: Multi-User Aspekte
+    - title: Multi-User-Applikation
       items:
         - title: Authentifizierung
         - title: Benutzerprofil
         - title: Benutzerverwaltung
         - title: Benutzerrollen und Berechtigungen
         - title: Aktivitätsprotokoll
-        - title: Domänen-spezifische Funktionalität
+        - title: Domänen-spezifische Funktionalität und Benutzerinterface (UI)
+        - title: Tests
 
   - - title: Sozialkompetenz
       items:
