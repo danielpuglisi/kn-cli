@@ -1,0 +1,33 @@
+number: 335
+title: Mobile Applikation realisieren
+competences:
+  - - title: Projekt
+      items:
+        - title: Projektdokumentation
+        - title: Ablage und Versionierung mit GIT
+        - title: Nachvollziehbare Projekt- und Code-Struktur
+  - - title: App UX
+      items:
+        - title: Intuitive Benutzeroberfläche gemäss den Interaktionsprinzipien nach ISO 9241-110
+        - title: Zweckmässige und sinnvoll formulierte User Stories
+        - title: Vollständige Überprüfung der Formulareingaben mit entsprechendem Feedback
+  - - title: App Umsetzung
+      items:
+        - title: Aussagekräftige Variablen-, Funktions- und Komponenten-Bezeichnungen
+        - title: Funktionierende Anbindung an supabase.com
+        - title: Vollständige Implementierung der CRUD-Aktionen
+        - title: Integration der geforderten Anzahl Geräteschnittstellen
+        - title: Integration manueller Dark-Mode
+        - title: Mindestens 3 Ansichten mit sinnvoller Navigation
+        - title: Abgabe lauffähige Android App (APK)
+  - - title: App Präsentation
+      items:
+        - title: Thematisch passender App-Name mit App-Icon und Splash-Screen
+        - title: Präsentation
+  - - title: Sozialkompetenz
+      items:
+        - title: "Arbeits- und Terminverhalten (Anzahl Verspätungen: %{absences_count})"
+  - - title: Wissen
+      items:
+        - title: Verständnisfragen (maximal 10 Punkte)
+          max_points: 10.0
