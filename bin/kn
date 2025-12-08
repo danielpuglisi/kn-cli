@@ -30,7 +30,7 @@ class CLI < Thor
     end
   end
 
-  desc 'pdf [CURRICULUM_ID]', 'Generate an example PDF for a specific curriculum config'
+  desc 'example_pdf [CURRICULUM_ID]', 'Generate an example PDF for a specific curriculum config'
   method_option :file_name, type: :string, desc: 'File name for the generated PDF', required: true
   def example_pdf(curriculum_id)
     PdfBuilder.call(curriculum_id, student: {}, data: {}, date: '', instructor: '', file_name: options[:file_name])
