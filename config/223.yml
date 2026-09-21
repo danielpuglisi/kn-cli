@@ -5,24 +5,24 @@ competences:
       items:
         - title: Dokumentation und sinnvoller Einsatz von Dokumentationstools
         - title: Konventionen beachtet (Code, Dateinamen, Frameworks etc.)
-        - title: Applikation ist lauffähig und erfüllt die Anforderungen
+        - title: Applikation ist lauffähig und entspricht der Dokumentation
         - title: Abschlusspräsentation
 
     - title: Domänenmodell und Architektur
       items:
-        - title: Anforderungen berücksichtigt
         - title: Domänenspezifische Fachbegriffe verwendet
-        - title: Implementation entspricht Dokumentation
         - title: Datenbankmodell
 
     - title: Multi-User-Applikation
       items:
         - title: Authentifizierung
+        - title: Benutzerrollen und Berechtigungen
         - title: Benutzerprofil
         - title: Benutzerverwaltung
-        - title: Benutzerrollen und Berechtigungen
+        - title: Transaktionen und Locking
         - title: Aktivitätsprotokoll
         - title: Fehlerbehandlung und User Feedback
+        - title: Testing
         - title: Kernfunktion (domänen-spezifische Funktionalität und Benutzerschnittstelle (UI))
 
   - - title: Sozialkompetenz
